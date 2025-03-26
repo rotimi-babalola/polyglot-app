@@ -1,12 +1,14 @@
 import { LangSelect } from "./lang-select";
 import { ErrorCard } from "./error-card";
+import { TranslationResult } from "./translation-result";
+
+import { useTranslator } from "../hooks/useTranslator";
 
 import frLogo from "../assets/french-flag.svg";
 import ESFlag from "../assets/spanish-flag.svg";
 import JPFlag from "../assets/japanese-flag.svg";
+import deFlag from "../assets/german-flag.svg";
 import headerLogo from "../assets/parrot-mascot.png";
-import TranslationResult from "./translation-result";
-import { useTranslator } from "../hooks/useTranslator";
 
 interface Flag {
   logo: string;
@@ -17,6 +19,7 @@ const flagsMapping: Flag[] = [
   { logo: frLogo, name: "French" },
   { logo: ESFlag, name: "Spanish" },
   { logo: JPFlag, name: "Japanese" },
+  { logo: deFlag, name: "German" },
 ];
 
 export const PollyGlotTranslator = () => {

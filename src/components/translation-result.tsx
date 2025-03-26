@@ -2,7 +2,7 @@ type Props = {
   translation: string;
 };
 
-const TranslationResult = ({ translation }: Props) => {
+export const TranslationResult = ({ translation }: Props) => {
   return (
     <div className="py-6 text-center">
       <h2 className="text-xl font-bold text-blue-800 mb-3">
@@ -14,5 +14,3 @@ const TranslationResult = ({ translation }: Props) => {
     </div>
   );
 };
-
-export default TranslationResult;

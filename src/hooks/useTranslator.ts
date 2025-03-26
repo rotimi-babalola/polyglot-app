@@ -10,6 +10,7 @@ export const useTranslator = () => {
   const [text, setText] = useState("");
   const [translation, setTranslation] = useState("");
   const [language, setLanguage] = useState("French");
+  const [error, setError] = useState("");
 
   const openai = new OpenAI({
     apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
@@ -43,8 +44,8 @@ export const useTranslator = () => {
       if (completion.choices[0].message.content) {
         setTranslation(completion.choices[0].message.content);
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
+      setError("An error occurred while translating the text");
     } finally {
       setIsLoading(false);
     }
@@ -59,5 +60,7 @@ export const useTranslator = () => {
     setLanguage,
     translateText,
     setTranslation,
+    error,
+    setError,
   };
 };

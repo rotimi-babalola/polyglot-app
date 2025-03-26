@@ -1,4 +1,5 @@
 import { LangSelect } from "./lang-select";
+import { ErrorCard } from "./error-card";
 
 import frLogo from "../assets/french-flag.svg";
 import ESFlag from "../assets/spanish-flag.svg";
@@ -28,14 +29,18 @@ export const PollyGlotTranslator = () => {
     setLanguage,
     translateText,
     setTranslation,
+    error,
+    setError,
   } = useTranslator();
+
+  console.log({ error });
 
   const renderContent = () => {
     if (translation) {
       return <TranslationResult translation={translation} />;
     }
 
-    if (!isLoading) {
+    if (!isLoading && !error) {
       return (
         <LangSelect
           flagsMapping={flagsMapping}
@@ -43,6 +48,10 @@ export const PollyGlotTranslator = () => {
           setLanguage={setLanguage}
         />
       );
+    }
+
+    if (error) {
+      return <ErrorCard />;
     }
 
     return null;
@@ -55,14 +64,22 @@ export const PollyGlotTranslator = () => {
       return;
     }
 
+    if (error) {
+      setError("");
+      setText("");
+      return;
+    }
+
     translateText({ text, targetLanguage: language });
   };
 
   const buttonText = isLoading
     ? "Translating..."
-    : translation
+    : translation || error
     ? "Start over"
     : "Translate";
+
+  const isButtonDisabled = isLoading || !text;
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden font-sans">
@@ -74,7 +91,7 @@ export const PollyGlotTranslator = () => {
 
       <div className="p-6 border rounded-b-lg">
         <h2 className="text-xl font-bold text-center text-blue-800 mb-2">
-          Text to translate 👇
+          {translation ? "Your translation 👇" : "Original text 👇"}
         </h2>
         <textarea
           value={text}
@@ -87,9 +104,11 @@ export const PollyGlotTranslator = () => {
 
         <button
           onClick={handleClick}
-          disabled={isLoading}
+          disabled={isButtonDisabled}
           className={`w-full flex justify-center items-center gap-2 bg-blue-700 text-white text-lg font-bold py-2 rounded transition ${
-            isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"
+            isButtonDisabled
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-blue-800"
           }`}
         >
           {isLoading && (

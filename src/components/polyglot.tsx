@@ -91,7 +91,7 @@ export const PollyGlotTranslator = () => {
 
       <div className="p-6 border rounded-b-lg">
         <h2 className="text-xl font-bold text-center text-blue-800 mb-2">
-          {translation ? "Your translation 👇" : "Original text 👇"}
+          {translation ? "Original text 👇" : "Text to translate 👇"}
         </h2>
         <textarea
           value={text}

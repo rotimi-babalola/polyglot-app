@@ -36,8 +36,6 @@ export const PollyGlotTranslator = () => {
     setError,
   } = useTranslator();
 
-  console.log({ error });
-
   const renderContent = () => {
     if (translation) {
       return <TranslationResult translation={translation} />;

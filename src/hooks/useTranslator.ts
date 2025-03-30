@@ -1,22 +1,17 @@
 import { useState } from "react";
-import OpenAI from "openai";
 
 type TranslateTextProps = {
   text: string;
   targetLanguage: string;
 };
 
+const WORKER_URL = "https://openai-api-worker.tolurotimi.workers.dev/";
+
 export const useTranslator = () => {
   const [text, setText] = useState("");
   const [translation, setTranslation] = useState("");
   const [language, setLanguage] = useState("French");
   const [error, setError] = useState("");
-
-  const openai = new OpenAI({
-    apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
-    // TODO: remove this in production
-    dangerouslyAllowBrowser: true,
-  });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,25 +20,35 @@ export const useTranslator = () => {
     targetLanguage,
   }: TranslateTextProps) => {
     setIsLoading(true);
+
+    const messages = [
+      {
+        role: "system",
+        content:
+          "You are an expert language translator. You translate the text the user gives to the language they specify. Always give concise and accurate translations.",
+      },
+      {
+        role: "user",
+        content: `Translate this text to ${targetLanguage}: ${text}`,
+      },
+    ];
+
     try {
-      const completion = await openai.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an expert language translator. You translate the text the user gives to the language they specify. Always give concise and accurate translations.",
-          },
-          {
-            role: "user",
-            content: `Translate this text to ${targetLanguage}: ${text}`,
-          },
-        ],
-        model: "gpt-4o",
+      const request = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(messages),
       });
 
-      if (completion.choices[0].message.content) {
-        setTranslation(completion.choices[0].message.content);
+      const data = await request.json();
+
+      if (!request.ok) {
+        throw new Error(`Worker Error: ${data.error}`);
       }
+
+      setTranslation(data.content);
     } catch {
       setError("An error occurred while translating the text");
     } finally {

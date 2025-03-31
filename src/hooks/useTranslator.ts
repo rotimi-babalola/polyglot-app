@@ -24,8 +24,10 @@ export const useTranslator = () => {
     const messages = [
       {
         role: "system",
-        content:
-          "You are an expert language translator. You translate the text the user gives to the language they specify. Always give concise and accurate translations.",
+        content: `You are an expert multilingual translator with native-level fluency in all major languages.
+                  When a user provides a text and a target language, translate the text accurately and concisely,
+                  preserving tone, context, and meaning. Prioritize natural, idiomatic phrasing over word-for-word
+                  translation. Only provide the translated text, unless additional clarification is requested.`,
       },
       {
         role: "user",
